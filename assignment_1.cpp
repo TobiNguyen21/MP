@@ -80,30 +80,15 @@ public:
     //     _membersList.push_back(student);
     // }
 
-    string getClassname()
-    {
-        return _classname;
-    }
+    string getClassname() { return _classname; }
 
-    int getNumber()
-    {
-        return _number;
-    }
+    int getNumber() { return _number; }
 
-    void setClassname(string value)
-    {
-        _classname = value;
-    }
+    void setClassname(string value) { _classname = value; }
 
-    void setNumber(int value)
-    {
-        _number = value;
-    }
+    void setNumber(int value) { _number = value; }
 
-    vector<Student> getStudentList()
-    {
-        return _membersList;
-    }
+    vector<Student> getStudentList() { return _membersList; }
 };
 
 // create class school
@@ -121,25 +106,11 @@ public:
     virtual string printClass_TheSmallestNumber();
     virtual void printStudent_Excellent();
 
-    // void addClass(Classroom classroom)
-    // {
-    //     _classList.push_back(classroom);
-    // }
+    int getClassnumber() { return _classnumber; }
 
-    int getClassnumber()
-    {
-        return _classnumber;
-    }
+    void setClassnumber(int value) { _classnumber = value; } //=5
 
-    void setClassnumber(int value)
-    {
-        _classnumber = value; //=5
-    }
-
-    vector<Classroom> getClassList()
-    {
-        return _classList;
-    }
+    vector<Classroom> getClassList() { return _classList; }
 };
 
 // Method of class Student
@@ -148,14 +119,17 @@ void Student::createStudent(int index)
     string studentName;
     float grade;
     int id;
-    // student.getter();
+
     cout << "\nEnter Student " << index + 1 << ": ";
     cin.ignore();
     getline(cin, studentName);
+
     cout << "Grade: ";
     cin >> grade;
+
     cout << "ID: ";
     cin >> id;
+
     _studentname = studentName;
     _diemTB = grade;
     _id = id;
@@ -166,6 +140,7 @@ void Classroom::createClassRoom(int index)
 {
     string className;
     int studentNum;
+
     cout << "\n---------------------------------\n";
     cout << "\nClass " << index + 1;
     cout << "\nEnter class name: ";
@@ -222,7 +197,6 @@ Student Classroom::find_ExcellentStudent()
 // Method of class School
 void School::createSchool()
 {
-
     for (int i = 0; i < _classnumber; i++)
     {
         Classroom classroom;
@@ -296,7 +270,7 @@ string School::printClass_TheSmallestNumber()
     return NULL;
 }
 
-// The student with the highest grade
+////>> The student with the highest grade
 void School::printStudent_Excellent()
 {
     vector<Student> resultExcellentOfClassroom;
