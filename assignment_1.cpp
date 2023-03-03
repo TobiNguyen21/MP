@@ -4,10 +4,6 @@
 #include <algorithm>
 using namespace std;
 
-class Student;
-class Classroom;
-class School;
-
 // string randomString(int len)
 // {
 //     // A function to generate random strings of length -->
@@ -40,7 +36,7 @@ public:
     virtual void createStudent(int index);
     bool checkExcellent()
     {
-        if (_diemTB > 8.0)
+        if (_diemTB >= 8.0)
         {
             return true;
         }
@@ -75,6 +71,7 @@ public:
     virtual void createClassRoom(int index);
     virtual bool check_5ExcellentStudent();
     virtual Student find_ExcellentStudent(); // The student with the highest grade
+    virtual int count_ExcellentStudent();
     // void addStudent(Student student)
     // {
     //     _membersList.push_back(student);
@@ -105,6 +102,7 @@ public:
     virtual string printClass_TheLargestNumber();
     virtual string printClass_TheSmallestNumber();
     virtual void printStudent_Excellent();
+    virtual string printClass_Excellent(); // The class with the highest number of students with the highest grade
 
     int getClassnumber() { return _classnumber; }
 
@@ -194,6 +192,18 @@ Student Classroom::find_ExcellentStudent()
     return {};
 }
 
+int Classroom::count_ExcellentStudent()
+{
+    int count = 0;
+    for (auto &student : _membersList)
+    {
+        if (student.getDiem() >= 8)
+        {
+            count++;
+        }
+    }
+    return count;
+}
 // Method of class School
 void School::createSchool()
 {
@@ -295,6 +305,27 @@ void School::printStudent_Excellent()
     }
 }
 
+string School::printClass_Excellent()
+{
+    int max = _classList.at(0).count_ExcellentStudent();
+    ;
+    for (auto &classroom : _classList)
+    {
+        if (classroom.count_ExcellentStudent() > max)
+        {
+            max = classroom.count_ExcellentStudent();
+        }
+    }
+    for (auto &classroom : _classList)
+    {
+        if (classroom.count_ExcellentStudent() == max)
+        {
+            return classroom.getClassname();
+        }
+    }
+    return NULL;
+}
+
 int main()
 {
     int classNum;
@@ -320,6 +351,9 @@ int main()
 
     cout << "\n------------------------------------------\n";
     school.printStudent_Excellent();
+
+    cout << "\n------------------------------------------\n";
+    cout << "The class with the highest number of students with the highest grade: " << school.printClass_Excellent();
 
     cout << "\n------------------------------------------\n";
     school.printSchool();
