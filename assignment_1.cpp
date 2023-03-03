@@ -72,10 +72,6 @@ public:
     virtual bool check_5ExcellentStudent();
     virtual Student find_ExcellentStudent(); // The student with the highest grade
     virtual int count_ExcellentStudent();
-    // void addStudent(Student student)
-    // {
-    //     _membersList.push_back(student);
-    // }
 
     string getClassname() { return _classname; }
 
