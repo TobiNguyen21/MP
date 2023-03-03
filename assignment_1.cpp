@@ -1,6 +1,7 @@
 #include <iostream>
 #include <string>
 #include <vector>
+#include <algorithm>
 using namespace std;
 
 class Student;
@@ -33,6 +34,7 @@ class Student
 private:
     string _studentname;
     float _diemTB;
+    int _id;
 
 public:
     virtual void createStudent(int index);
@@ -56,14 +58,9 @@ public:
     //     _diemTB = grade;
     // }
 
-    string getStudentName()
-    {
-        return _studentname;
-    }
-    float getDiem()
-    {
-        return _diemTB;
-    }
+    string getStudentName() { return _studentname; }
+    float getDiem() { return _diemTB; }
+    int getID() { return _id; }
 };
 
 // create class Classrom
@@ -76,24 +73,12 @@ private:
 
 public:
     virtual void createClassRoom(int index);
-
+    virtual bool check_5ExcellentStudent();
+    virtual Student find_ExcellentStudent(); // The student with the highest grade
     // void addStudent(Student student)
     // {
     //     _membersList.push_back(student);
     // }
-
-    bool check_5ExcellentStudent()
-    {
-        int cout = 0;
-        for (auto &student : _membersList)
-        {
-            if (student.checkExcellent())
-                cout++;
-        }
-        if (cout > 5)
-            return true;
-        return false;
-    }
 
     string getClassname()
     {
@@ -134,6 +119,7 @@ public:
     virtual vector<string> printClass_5ExcellentStudent();
     virtual string printClass_TheLargestNumber();
     virtual string printClass_TheSmallestNumber();
+    virtual void printStudent_Excellent();
 
     // void addClass(Classroom classroom)
     // {
@@ -156,20 +142,26 @@ public:
     }
 };
 
+// Method of class Student
 void Student::createStudent(int index)
 {
     string studentName;
     float grade;
+    int id;
     // student.getter();
     cout << "\nEnter Student " << index + 1 << ": ";
     cin.ignore();
     getline(cin, studentName);
     cout << "Grade: ";
     cin >> grade;
+    cout << "ID: ";
+    cin >> id;
     _studentname = studentName;
     _diemTB = grade;
+    _id = id;
 }
 
+// Method of class Classroom
 void Classroom::createClassRoom(int index)
 {
     string className;
@@ -179,7 +171,7 @@ void Classroom::createClassRoom(int index)
     cout << "\nEnter class name: ";
     cin.ignore();
     getline(cin, className);
-    cout << "\nEnter student numbers: ";
+    cout << "\nEnter capacity of class: ";
     cin >> studentNum;
     _number = studentNum;
     _classname = className;
@@ -193,6 +185,41 @@ void Classroom::createClassRoom(int index)
     }
 }
 
+bool Classroom::check_5ExcellentStudent()
+{
+    int cout = 0;
+    for (auto &student : _membersList)
+    {
+        if (student.checkExcellent())
+            cout++;
+    }
+    if (cout > 5)
+        return true;
+    return false;
+}
+
+Student Classroom::find_ExcellentStudent()
+{
+    float maxGrade = _membersList.at(0).getDiem();
+    for (auto &student : _membersList)
+    {
+        if (student.getDiem() > maxGrade)
+        {
+            maxGrade = student.getDiem();
+        }
+    }
+
+    for (auto &student : _membersList)
+    {
+        if (student.getDiem() == maxGrade)
+        {
+            return student;
+        }
+    }
+    return {};
+}
+
+// Method of class School
 void School::createSchool()
 {
 
@@ -211,7 +238,7 @@ void School::printSchool()
         cout << "\n--------------" << classroom.getClassname() << "----------------\n";
         for (auto &student : classroom.getStudentList())
         {
-            cout << student.getStudentName() << "-" << student.getDiem() << endl;
+            cout << student.getID() << "-" << student.getStudentName() << "-" << student.getDiem() << endl;
         }
     }
 }
@@ -269,6 +296,31 @@ string School::printClass_TheSmallestNumber()
     return NULL;
 }
 
+// The student with the highest grade
+void School::printStudent_Excellent()
+{
+    vector<Student> resultExcellentOfClassroom;
+    for (auto &classroom : _classList)
+    {
+        resultExcellentOfClassroom.push_back(classroom.find_ExcellentStudent());
+    }
+    float max = resultExcellentOfClassroom.at(0).getDiem();
+    for (auto &item : resultExcellentOfClassroom)
+    {
+        if (item.getDiem() > max)
+        {
+            max = item.getDiem();
+        }
+    }
+    for (auto &item : resultExcellentOfClassroom)
+    {
+        if (item.getDiem() == max)
+        {
+            cout << "The student with the highest grade: " << item.getStudentName() << " ID:" << item.getID();
+        }
+    }
+}
+
 int main()
 {
     int classNum;
@@ -291,6 +343,9 @@ int main()
 
     cout << "\n------------------------------------------\n";
     cout << "Class with the smallest number: " << school.printClass_TheSmallestNumber();
+
+    cout << "\n------------------------------------------\n";
+    school.printStudent_Excellent();
 
     cout << "\n------------------------------------------\n";
     school.printSchool();
