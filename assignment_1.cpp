@@ -27,6 +27,7 @@ class School;
 //     return start + (random_value * range);
 // }
 
+// create class Student
 class Student
 {
 private:
@@ -35,7 +36,14 @@ private:
 
 public:
     virtual void createStudent(int index);
-
+    bool checkExcellent()
+    {
+        if (_diemTB > 8.0)
+        {
+            return true;
+        }
+        return false;
+    }
     // void getter()
     // {
     //     _studentname = randomString(5);
@@ -58,7 +66,8 @@ public:
     }
 };
 
-class Classroom : public Student
+// create class Classrom
+class Classroom
 {
 private:
     string _classname;
@@ -72,6 +81,19 @@ public:
     // {
     //     _membersList.push_back(student);
     // }
+
+    bool check_5ExcellentStudent()
+    {
+        int cout = 0;
+        for (auto &student : _membersList)
+        {
+            if (student.checkExcellent())
+                cout++;
+        }
+        if (cout > 5)
+            return true;
+        return false;
+    }
 
     string getClassname()
     {
@@ -100,7 +122,7 @@ public:
 };
 
 // create class school
-class School : public Classroom
+class School
 {
 private:
     int _classnumber;
@@ -109,6 +131,9 @@ private:
 public:
     virtual void createSchool();
     virtual void printSchool();
+    virtual vector<string> printClass_5ExcellentStudent();
+    virtual string printClass_TheLargestNumber();
+    virtual string printClass_TheSmallestNumber();
 
     // void addClass(Classroom classroom)
     // {
@@ -191,6 +216,59 @@ void School::printSchool()
     }
 }
 
+vector<string> School::printClass_5ExcellentStudent()
+{
+    vector<string> listClass_5ExcellentStudent = {};
+    for (auto &classroom : _classList)
+    {
+        if (classroom.check_5ExcellentStudent())
+        {
+            listClass_5ExcellentStudent.push_back(classroom.getClassname());
+        }
+    }
+    return listClass_5ExcellentStudent;
+}
+
+string School::printClass_TheLargestNumber()
+{
+    int max = _classList.at(0).getNumber();
+    for (auto &classroom : _classList)
+    {
+        if (classroom.getNumber() > max)
+        {
+            max = classroom.getNumber();
+        }
+    }
+    for (auto &classroom : _classList)
+    {
+        if (classroom.getNumber() == max)
+        {
+            return classroom.getClassname();
+        }
+    }
+    return NULL;
+}
+
+string School::printClass_TheSmallestNumber()
+{
+    int min = _classList.at(0).getNumber();
+    for (auto &classroom : _classList)
+    {
+        if (classroom.getNumber() < min)
+        {
+            min = classroom.getNumber();
+        }
+    }
+    for (auto &classroom : _classList)
+    {
+        if (classroom.getNumber() == min)
+        {
+            return classroom.getClassname();
+        }
+    }
+    return NULL;
+}
+
 int main()
 {
     int classNum;
@@ -200,6 +278,21 @@ int main()
     School school;
     school.setClassnumber(classNum);
     school.createSchool();
+
+    cout << "\n------------------------------------------\n";
+    cout << "Class with more than 5 excellent students: ";
+    for (auto &item : school.printClass_5ExcellentStudent())
+    {
+        cout << item << ", ";
+    }
+
+    cout << "\n------------------------------------------\n";
+    cout << "Class with the largest number: " << school.printClass_TheLargestNumber();
+
+    cout << "\n------------------------------------------\n";
+    cout << "Class with the smallest number: " << school.printClass_TheSmallestNumber();
+
+    cout << "\n------------------------------------------\n";
     school.printSchool();
     return 0;
 }
